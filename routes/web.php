@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LevelController;
+use App\Http\Controllers\KategoriController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,27 +21,30 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/about', function () {
-    return 'NIM : 23.51.0002, NAMA : TRI BINTANG PAMUNGKAS';
-});
+// Route::get('/about', function () {
+//     return 'NIM : 23.51.0002, NAMA : TRI BINTANG PAMUNGKAS';
+// });
 
-Route::get('/hello', function () {
-return 'Hello World';
-});
+// Route::get('/hello', function () {
+// return 'Hello World';
+// });
 
 // Route::get('/user/{name}', function ($name) {
 // return 'Hallo Nama saya '.$name;
 // });
 
-Route::get('/posts/{post}/comments/{comment}', function
-($postId, $commentId) {
-return 'Pos ke-'.$postId." Komentar ke-: ".$commentId;
-});
+// Route::get('/posts/{post}/comments/{comment}', function
+// ($postId, $commentId) {
+// return 'Pos ke-'.$postId." Komentar ke-: ".$commentId;
+// });
 
-Route::get('/user/{name?}', function ($name=null) {
-    return 'Nama saya '.$name;
-});
+// Route::get('/user/{name?}', function ($name=null) {
+//     return 'Nama saya '.$name;
+// });
 
-Route::view('/Kontak', 'Kontak');
+// Route::view('/Kontak', 'Kontak');
 
 Route::get('/level', [LevelController::class, 'index']);
+Route::get('/kategori', [KategoriController::class, 'index']);
+Route::get('/user', [UserController::class, 'index']);
+
