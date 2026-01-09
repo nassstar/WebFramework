@@ -2,34 +2,38 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
 class PenjualanDetailSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        $detail = [];
-        $penjualanId = 1;
+        // 1. Ambil semua ID barang yang ada
+        $barang = DB::table('m_barang')->get();
 
-        // Buat 30 detail, 3 per penjualan (10 penjualan)
-        for ($i = 1; $i <= 30; $i++) {
-            $detail[] = [
-                'penjualan_id' => $penjualanId,
-                'barang_id' => rand(1, 15), // Ambil barang acak dari 15 barang
-                'harga' => rand(2000, 100000), // Harga acak
-                'jumlah' => rand(1, 5), // Jumlah acak 1-5
-            ];
+        // 2. Ambil semua ID penjualan yang ada
+        $penjualanIds = DB::table('t_penjualan')->pluck('penjualan_id');
 
-            if ($i % 3 == 0) { // Setiap 3 detail, naik ke penjualan berikutnya
-                $penjualanId++;
+        $data = [];
+
+        // 3. Loop setiap transaksi penjualan, kita buatkan 3 detail barang per transaksi
+        foreach ($penjualanIds as $penjualanId) {
+
+            // Ambil 3 barang acak dari database
+            $randomBarang = $barang->random(3);
+
+            foreach ($randomBarang as $brg) {
+                $data[] = [
+                    'penjualan_id' => $penjualanId,
+                    'barang_id'    => $brg->barang_id, // Pasti valid karena ambil dari DB
+                    'harga'        => $brg->harga_jual,
+                    'jumlah'       => rand(1, 5),
+                ];
             }
         }
 
-        DB::table('t_penjualan_detail')->insert($detail);
+        // 4. Masukkan data ke database
+        DB::table('t_penjualan_detail')->insert($data);
     }
 }

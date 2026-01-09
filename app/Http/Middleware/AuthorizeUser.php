@@ -1,0 +1,27 @@
+<?php
+
+namespace App\Http\Middleware;
+
+use Closure;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
+
+class AuthorizeUser
+{
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     */
+    public function handle(Request $request, Closure $next, ...$roles): Response
+    {
+        $user_role = $request->user()->getRole(); // Ambil kode level user (ADM, MNG, dll)
+
+        if (in_array($user_role, $roles)) { // Cek apakah role user ada di array roles yang diizinkan
+            return $next($request);
+        }
+
+        // Jika tidak punya akses
+        abort(403, 'Forbidden. Kamu tidak punya akses ke halaman ini');
+    }
+}
